@@ -127,3 +127,7 @@ dist
 # Configuration
 
 config.json
+
+# Database
+
+database.sqlite
