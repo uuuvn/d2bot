@@ -7,5 +7,6 @@ function log(msg,filename = "utils.js") {
 }
 
 module.exports = {
-    "log": log
+    "log": log,
+    "warn": log
 };
