@@ -48,12 +48,23 @@ module.exports.run = (bot, message, args) => {
                 return message.channel.send(embed);
             }
             users.forEach((user) => {
+                if(bot.cnfm.config.forceowners[user.id])return;
                 embed.addField("Removed", `<@${user.id}>`);
                 promises.push(bot.db.removeOwner(user.id));
             });
             Promise.all(promises).then(() => {
                 message.channel.send(embed);
             })
+        });
+    } else {
+        bot.db.isOwner(message.author.id).then((owner) => {
+            if (!owner) {
+                embed.setDescription("Ты не можешь сделать этого!");
+                return message.channel.send(embed);
+            } else {
+                embed.setDescription(module.exports.help.usage);
+                return message.channel.send(embed);
+            }
         });
     }
 };

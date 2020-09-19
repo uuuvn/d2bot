@@ -131,3 +131,8 @@ config.json
 # Database
 
 database.sqlite
+
+#ssl certs
+
+ssl/server.key
+ssl/server.crt

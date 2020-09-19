@@ -5,6 +5,7 @@
   "main": "startup.js",
   "dependencies": {
     "discord.js": "^12.3.1",
+    "express": "^4.17.1",
     "sqlite3": "^5.0.0"
   },
   "devDependencies": {
