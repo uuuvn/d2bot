@@ -11,7 +11,7 @@ const db = require("./database.js");
 const cnfm = require("./confmngr.js");
 const Discord = require('discord.js');
 const bot = new Discord.Client({ disableEveryone: true });
-const web = require("./web.js");
+//const web = require("./web.js");
 const e = require("express");
 //Функция загрузки модулей
 function load(dir) {
