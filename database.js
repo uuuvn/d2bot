@@ -42,6 +42,7 @@ db.serialize(() => {
             if (!id) return reject("id is undefined");
             db.get("SELECT * FROM users WHERE id = ?", id, (err, row) => {
                 if (err) return reject(err);
+                if(row)return resolve(id);
                 db.run("INSERT INTO users (id,permission) VALUES (?,?)", id, permission, (err) => {
                     if (err) return reject();
                     resolve(id);

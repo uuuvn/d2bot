@@ -51,6 +51,6 @@ module.exports.help = {
 	name: "reload",
 	aliases: ["rl"],
 	description: "Эта комманда позволяет перезагрузить модуль ^-^",
-	usage: "reload",
+	usage: "<command name>",
 	category: "Developer"
 };

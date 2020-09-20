@@ -91,6 +91,7 @@ function init() {
             command.run(bot, message, args)
         }
     });
+    //Обработка кика
     //Обработка голосовых каналов
     bot.on("voiceStateUpdate", async function (oldMember, newMember) {
         if (oldMember.channel) {
@@ -104,13 +105,16 @@ function init() {
                     oldMember.channel.parent.children.forEach((element) => {
                         if (element.members.size == 0) {
                             empty.push(element);
+                            element.permissionOverwrites.forEach(element => {
+                                element.delete().catch((e)=>{});
+                            });
                         } else {
                             full.push(element);
                         }
                     });
                     if (empty.length > 1) {
                         empty.slice(1, empty.length).forEach(element => {
-                            element.delete();
+                            element.delete().catch((e)=>{});
                         });
                     }
                 });
@@ -130,10 +134,11 @@ function init() {
                         });
                         if (needCreate) {
                             if (limit == -1) {
-                                newMember.guild.channels.create(name, { type: "voice", parent: newMember.channel.parentID });
+                                newMember.guild.channels.create(name, { type: "voice", parent: newMember.channel.parentID }).catch((e)=>{});
                             } else {
-                                newMember.guild.channels.create(name, { type: "voice", parent: newMember.channel.parentID, userLimit: limit });
+                                newMember.guild.channels.create(name, { type: "voice", parent: newMember.channel.parentID, userLimit: limit }).catch((e)=>{});
                             }
+
                         }
                     }
                 });

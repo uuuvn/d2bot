@@ -73,6 +73,6 @@ module.exports.help = {
     name: "owner",
     aliases: ["ow"],
     description: "Настройка владельцев",
-    usage: "owner <add <ping> | remove <ping> | list>",
+    usage: "<add <ping> | remove <ping> | list>",
     category: "Developer"
 };

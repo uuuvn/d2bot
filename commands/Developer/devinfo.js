@@ -25,6 +25,6 @@ module.exports.help = {
   name: "devinfo",
   aliases: ["di"],
   description: "Эта комманда показывает информацию для разработчиков",
-  usgae: "devinfo (command name)",
+  usage: "",
   category: "Developer",
 };
