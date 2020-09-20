@@ -98,7 +98,7 @@ module.exports.run = (bot, message, args) => {
     });
   } else if (args[0] == "kick") {
     if (!message.member.permissions.has("ADMINISTRATOR")) {
-      embed.setDescription("Ты не можешь сделать этого!");
+      embed.setDescription("Ты не можешь сделать этого, попробую votekick!");
       return message.channel.send(embed);
     }
     if (message.mentions.members.size != 1) {
@@ -134,6 +134,6 @@ module.exports.help = {
   name: "voice",
   aliases: ["v"],
   description: "Эта комманда *ЧИТАТЬ ДАЛЕЕ*",
-  usage: "create <Имена каналов> <лимит пользователей(-1 для откл)> | kick <@упоминание>",
+  usage: "create <Имена каналов> <лимит пользователей(-1 для откл)> | kick <@упоминание> | votekick <@упоминание>",
   category: "Voice",
 };
