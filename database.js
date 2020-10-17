@@ -10,6 +10,7 @@ let db = new sqlite3.Database('./database.sqlite');
 db.serialize(() => {
     db.run("CREATE TABLE IF NOT EXISTS users (id TEXT,permission INT)");
     db.run("CREATE TABLE IF NOT EXISTS autochannel (id TEXT,name TEXT,userlimit INT)");
+    db.run("CREATE TABLE IF NOT EXISTS pchannel (id TEXT,createid TEXT)");
 
     function isOwner(id) {
         return new Promise((resolve, reject) => {
@@ -81,6 +82,40 @@ db.serialize(() => {
             })
         });
     }
+    function RegPCategory(id,createid) {
+        return new Promise((resolve, reject) => {
+            if (!id) return reject("id is undefined");
+            if (!createid) return reject("createid is undefined");
+            db.run("INSERT INTO pchannel (id,createid) VALUES (?,?)", id, createid, (err) => {
+                if (err) return reject();
+                resolve(id);
+            })
+        });
+    }
+    function IsRegistredPCategory(id,createid) {
+        return new Promise((resolve, reject) => {
+            if (!id) return reject("id is undefined");
+            if(createid){
+                db.get("SELECT * FROM pchannel WHERE id = ? AND createid = ?", id, createid, (err, row) => {
+                    if (err) return reject(err);
+                    if (row) {
+                        resolve(true);
+                    } else {
+                        resolve(false);
+                    }
+                })
+            }else{
+                db.get("SELECT * FROM pchannel WHERE id = ?", id, (err, row) => {
+                    if (err) return reject(err);
+                    if (row) {
+                        resolve(true);
+                    } else {
+                        resolve(false);
+                    }
+                })
+            }
+        });
+    }
 
     module.exports = {
         "getOwners": getOwners,
@@ -88,6 +123,8 @@ db.serialize(() => {
         "removeOwner": removeOwner,
         "isOwner": isOwner,
         "RegCategory": RegCategory,
-        "IsRegistredCategory": IsRegistredCategory
+        "IsRegistredCategory": IsRegistredCategory,
+        "RegPCategory": RegPCategory,
+        "IsRegistredPCategory": IsRegistredPCategory
     };
 });

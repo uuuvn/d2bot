@@ -1,1 +1,1 @@
-{"token": "BOT_TOKEN","prefix": "!","commandsFolder": ".\\commands","web":{"bind": "443"},"forceowners": ["381844529050812417"]}
+{"token": "BOT_TOKEN","prefix": "!","commandsFolder": "./commands","web":{"bind": "443"},"forceowners": ["381844529050812417"]}

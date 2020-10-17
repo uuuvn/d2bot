@@ -47,7 +47,7 @@ module.exports.run = (bot, message, args) => {
 			else if (category !== "Developer") embed.addField(`❯ ${capitalise}`, dir.map(c => `\`${c.help.name}\``).join(", "));
 		}
 		catch (e) {
-			console.log(e);
+			utils.log(e);
 		}
 	});
 	return message.channel.send(embed);

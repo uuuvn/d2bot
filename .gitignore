@@ -136,3 +136,4 @@ database.sqlite
 
 ssl/server.key
 ssl/server.crt
+logs/*.log

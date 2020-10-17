@@ -43,6 +43,8 @@ module.exports.run = (bot, message, args) => {
           message.guild.channels.create(name, { type: "voice", parent: category, userLimit: limit });
         }
         bot.db.RegCategory(category.id, name, limit);
+        embed.setDescription("Успешно!");
+        return message.channel.send(embed);
       })
     } catch (e) {
       utils.log(e);
@@ -123,6 +125,8 @@ module.exports.run = (bot, message, args) => {
       voice.createOverwrite(tokick, { CONNECT: false }).then((ret) => {
         if (voice.id == tokick.voice.channelID) tokick.voice.kick();
       });
+      embed.setDescription("Успешно!");
+      return message.channel.send(embed);
     });
   } else {
     embed.setDescription(module.exports.help.usage);

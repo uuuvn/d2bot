@@ -30,12 +30,12 @@ function load(dir) {
                 // Добавляем в коллекцию
                 bot.commands.set(pull.help.name, pull);
                 // Ииии, логируем
-                utils.log(`Loaded command ${pull.help.name}!`, "startup.js");
+                utils.log(`Loaded command ${pull.help.name}!`);
 
             }
             else {
                 // Руггаемся на ошибОчку
-                utils.log(`Error loading command in ${dir}${dirs}. you have a missing help.name or help.name is not a string. or you have a missing help.category or help.category is not a string`, "startup.js");
+                utils.log(`Error loading command in ${dir}${dirs}. you have a missing help.name or help.name is not a string. or you have a missing help.category or help.category is not a string`);
                 continue;
             }
             // Чекаем сокращения
@@ -52,7 +52,7 @@ function load(dir) {
 }
 
 function init() {
-    utils.log(`Loading discord module...`, "startup.js");
+    utils.log(`Loading discord module...`);
     //Инициалтзируем
     bot.commands = new Discord.Collection();
     bot.aliases = new Discord.Collection();
@@ -62,12 +62,12 @@ function init() {
     //Добавляем меня в овнеры
     bot.cnfm.config.forceowners.forEach(element => {
         bot.db.addOwner(element).then((e) => {
-            utils.log("Added forceowner " + e, "startup.js");
+            utils.log("Added forceowner " + e);
         });
     });
     load(cnfm.config.commandsFolder);//Загружаем модули
     //web.start()//Стартуем веб сервер
-    bot.on("ready", () => utils.log(`Logged as ${bot.user.tag}!\nDiscord module ready!`, "startup.js"));
+    bot.on("ready", () => utils.log(`Logged as ${bot.user.tag}!\nDiscord module ready!`));
     //Обработчик сообщений ^-^
     bot.on("message", async message => {
         const prefix = bot.cnfm.config.prefix;
@@ -94,6 +94,8 @@ function init() {
     //Обработка кика
     //Обработка голосовых каналов
     bot.on("voiceStateUpdate", async function (oldMember, newMember) {
+        if (!newMember.guild.me.hasPermission("ADMINISTRATOR")) return;
+        //Обработка автоканалов
         if (oldMember.channel) {
             //Человек ливнул или сменил канал
             if (oldMember.channel.parent) {
@@ -134,9 +136,9 @@ function init() {
                         });
                         if (needCreate) {
                             if (limit == -1) {
-                                newMember.guild.channels.create(name, { type: "voice", parent: newMember.channel.parentID }).catch((e)=>{});
+                                newMember.guild.channels.create(name + " #" + (newMember.channel.parent.children.size + 1), { type: "voice", parent: newMember.channel.parentID }).catch((e)=>{});
                             } else {
-                                newMember.guild.channels.create(name, { type: "voice", parent: newMember.channel.parentID, userLimit: limit }).catch((e)=>{});
+                                newMember.guild.channels.create(name + " #" + (newMember.channel.parent.children.size + 1), { type: "voice", parent: newMember.channel.parentID, userLimit: limit }).catch((e)=>{});
                             }
 
                         }
@@ -144,10 +146,34 @@ function init() {
                 });
             }
         }
+        //Обработка персональных каналов
+        if (oldMember.channel) {
+            //Человек ливнул или сменил канал
+            if (oldMember.channel.parent) {
+                bot.db.IsRegistredPCategory(oldMember.channel.parentID).then((result) => {
+                    bot.db.IsRegistredPCategory(oldMember.channel.parentID,oldMember.channelID).then((_result) => {
+                        if (!result || _result) return;
+                        if(oldMember.channel.members.size == 0)oldMember.channel.delete();
+                    });
+                });
+            }
+        }
+        if (newMember.channel) {
+            //Человек зашёл или сменил канал
+            if (newMember.channel.parent) {
+                bot.db.IsRegistredPCategory(newMember.channel.parentID,newMember.channelID).then((result) => {
+                    if (result) {
+                        newMember.guild.channels.create("Личный канал \"" + newMember.member.displayName + "\"", { type: "voice", parent: newMember.channel.parentID, permissionOverwrites: [{id: newMember.member.id,allow: ["MUTE_MEMBERS", "MANAGE_CHANNELS"]}] }).catch((e)=>{}).then((channel)=>{
+                            newMember.setChannel(channel)
+                        });
+                    }
+                });
+            }
+        }
     })
     //Логинимся
     bot.login(cnfm.config.token).catch((e) => {
-        utils.log(e.toString(), "startup.js");
+        utils.log(e.toString());
     });
 }
 
