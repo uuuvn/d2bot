@@ -28,7 +28,7 @@ const { readdirSync } = require("fs");
 const utils = require("../../utils");
 
 module.exports.run = (bot, message, args) => {
-
+	utils.log("Я help");
 	const embed = new Discord.MessageEmbed()
 		.setColor("#2C2F33")
 		.setAuthor(`${bot.user.username} Help`, bot.user.displayAvatarURL)

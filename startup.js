@@ -88,6 +88,31 @@ function init() {
     load(cnfm.config.commandsFolder);//Загружаем модули
     //web.start()//Стартуем веб сервер
     bot.on("ready", () => utils.log(`Logged as ${bot.user.tag}!\nDiscord module ready!`));
+    bot.once("ready",()=>{
+        bot.db.listMutes().then((mutes)=>{
+            mutes.forEach(element => {
+                if(element.endTime + 5000 <= Date.now()){
+                    try {
+                        bot.guilds.cache.get(element.guild).members.fetch(element.subject).then((mem)=>{
+                            bot.emit("unmute",mem);
+                        })  
+                    } catch (error) {
+                        
+                    }
+                }else{
+                    setTimeout(()=>{
+                        try {
+                            bot.guilds.cache.get(element.guild).members.fetch(element.subject).then((mem)=>{
+                                bot.emit("unmute",mem);
+                            })  
+                        } catch (error) {
+                            
+                        }
+                    },element.endTime - Date.now());
+                }
+            });
+        });
+    });
     //Обработчик сообщений ^-^
     bot.on("message", async message => {
         const prefix = bot.cnfm.config.prefix;
@@ -191,6 +216,29 @@ function init() {
             }
         }
     })
+    bot.on("mute",(member)=>{
+        try {
+            if(!member)return;
+            let muterole = member.guild.roles.cache.find(role => role.name === "D2HUBBOT_mute");
+            if(!muterole)return;
+            member.roles.add(muterole);
+            bot.utils.log("muted " + member.id + "!");
+        } catch (error) {
+            utils.log(error.toString());
+        }
+    });
+    bot.on("unmute",(member)=>{
+        try {
+            if(!member)return;
+            let muterole = member.guild.roles.cache.find(role => role.name === "D2HUBBOT_mute");
+            if(!muterole)return;
+            member.roles.remove(muterole);
+            bot.db.unRegMute(member.id);
+            bot.utils.log("unmuted " + member.id + "!");   
+        } catch (error) {
+            utils.log(error.toString());
+        }
+    });
     //Логинимся
     bot.login(cnfm.config.token).catch((e) => {
         utils.log(e.toString());

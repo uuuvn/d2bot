@@ -28,9 +28,9 @@ let path = require('path');
 
 function _getCallerFile() {
     try {
-        var err = new Error();
-        var callerfile;
-        var currentfile;
+        let err = new Error();
+        let callerfile;
+        let currentfile;
 
 
         Error.prepareStackTrace = function (err, stack) { return stack; };

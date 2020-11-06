@@ -30,6 +30,7 @@ db.serialize(() => {
     db.run("CREATE TABLE IF NOT EXISTS users (id TEXT,permission INT)");
     db.run("CREATE TABLE IF NOT EXISTS autochannel (id TEXT,name TEXT,userlimit INT)");
     db.run("CREATE TABLE IF NOT EXISTS pchannel (id TEXT,createid TEXT)");
+    db.run("CREATE TABLE IF NOT EXISTS mutes (subject TEXT,moderator TEXT,startTime TEXT,endTime TEXT,reason TEXT,guild TEXT)");
 
     function isOwner(id) {
         return new Promise((resolve, reject) => {
@@ -135,6 +136,20 @@ db.serialize(() => {
             }
         });
     }
+    function registerMute(subject,moderator,startTime,endTime,reason,guild){
+        db.run("INSERT INTO mutes (subject,moderator,startTime,endTime,reason,guild) VALUES (?,?,?,?,?,?)",subject,moderator,startTime,endTime,reason,guild);
+    }
+    function listMutes(){
+        return new Promise((resolve, reject) => {
+            db.all("SELECT * FROM mutes",(err,rows)=>{
+                if(err)reject();
+                resolve(rows);
+            });
+        });
+    }
+    function unRegMute(subject){
+        db.run("DELETE FROM mutes WHERE subject=?",subject);
+    }
 
     module.exports = {
         "getOwners": getOwners,
@@ -144,6 +159,9 @@ db.serialize(() => {
         "RegCategory": RegCategory,
         "IsRegistredCategory": IsRegistredCategory,
         "RegPCategory": RegPCategory,
-        "IsRegistredPCategory": IsRegistredPCategory
+        "IsRegistredPCategory": IsRegistredPCategory,
+        "registerMute": registerMute,
+        "listMutes": listMutes,
+        "unRegMute": unRegMute
     };
 });
