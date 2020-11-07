@@ -26,7 +26,6 @@
 const Discord = require("discord.js");
 const parse = require('parse-duration');
 
-
 /**
  * @param {Discord.Client} bot
  * @param {Discord.Message} message
@@ -35,7 +34,7 @@ const parse = require('parse-duration');
 module.exports.run = (bot, message, args) => {
   const embed = new Discord.MessageEmbed()
     .setColor("#2C2F33")
-    .setAuthor(`${bot.user.username} Mute`, bot.user.displayAvatarURL)
+    .setAuthor(`${bot.user.username} Unmute`, bot.user.displayAvatarURL)
     .setFooter(`Requested by ${message.author.tag} at`, message.author.displayAvatarURL)
     .setTimestamp();
     if(!message.member.hasPermission("ADMINISTRATOR")){
@@ -47,11 +46,7 @@ module.exports.run = (bot, message, args) => {
       return message.channel.send(embed);
     }
     let muted = message.mentions.members.first();
-    let timestr = args.slice(1).join(" ");
-    if(muted.hasPermission("KICK_MEMBERS")){
-      embed.setDescription("Ты не можешь сделать этого!");
-      return message.channel.send(embed);
-    }
+
     if(message.member.id == muted.id){
       embed.setDescription("Ты не можешь сделать этого!");
       return message.channel.send(embed);
@@ -60,32 +55,15 @@ module.exports.run = (bot, message, args) => {
       embed.setDescription("Ошибка!");
       return message.channel.send(embed);
     }
-    if(!timestr){
-      embed.setDescription("Ты не указал время!");
-      return message.channel.send(embed);
-    }
-    let t = parse(timestr);
-    let startTime = Date.now();
-    let endTime = Date.now() + t;
-    bot.utils.log(startTime);
-    bot.utils.log(endTime);
-    if(t < 1000 * 60 * 60 * 24 * 31 * 12 * 10){
-      bot.db.registerMute(muted.id,message.member.id,startTime,endTime,"mutted",muted.guild.id);
-      setTimeout(()=>{
-        bot.emit("unmute",muted);
-      },t);
-      embed.setDescription("Пользователь был замучен на указанное время!");
-    }else{
-      embed.setDescription("Пользователь был замучен НАВСЕГДА!");
-    }
-    bot.emit("mute",muted);
+    bot.emit("unmute",muted);
+    embed.setDescription("Пользователь успешно размучен!");
     return message.channel.send(embed);
 };
 
 module.exports.help = {
-  name: "mute",
+  name: "unmute",
   aliases: [],
-  description: "Эта комманда позволяет заткнуть пользователя",
-  usage: "<@Упоминание> <время>",
+  description: "Эта комманда позволяет упомянотому пользоваель говорить",
+  usage: "<@Упоминание>",
   category: "Moderation",
 };

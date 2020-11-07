@@ -21,7 +21,7 @@
     "url": "git+https://gitlab.com/d2-group/d2bot.git"
   },
   "author": "uuuvn",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://gitlab.com/d2-group/d2bot/issues"
   },

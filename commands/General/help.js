@@ -60,6 +60,9 @@ module.exports.run = (bot, message, args) => {
 		`Доступные комманды для ${bot.user.username}.`,
 		`Префикс бота: **${bot.cnfm.config.prefix}**`,
 		"`<>` - обязательные параметры,`()` - опциональные параметры",
+		`Наш бот теперь с открытым исходном кодом! Исходный код бота: https://gitlab.com/d2-group/d2bot`,
+		`По пововоду написания бота на заказ пишите мне: uuuvn#8657`,
+		`Если вы нашли баг/ошибку/уязвимость, создавайте issue на гитлабе(https://gitlab.com/d2-group/d2bot/issues) или пишите мне(uuuvn#8657)`,
 	].join("\n"));
 	categories.forEach(category => {
 		const dir = bot.commands.filter(c => c.help.category.toLowerCase() === category.toLowerCase());
