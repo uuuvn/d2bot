@@ -38,7 +38,7 @@ module.exports.run = (bot, message, args) => {
     .setAuthor(`${bot.user.username} Mute`, bot.user.displayAvatarURL)
     .setFooter(`Requested by ${message.author.tag} at`, message.author.displayAvatarURL)
     .setTimestamp();
-    if(!message.member.hasPermission("ADMINISTRATOR")){
+    if(!message.member.hasPermission("MANAGE_GUILD")){
       embed.setDescription("Ты не можешь сделать этого!");
       return message.channel.send(embed);
     }
